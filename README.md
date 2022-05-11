@@ -1,5 +1,7 @@
-# Displaying Data in a List
+# Scrumdinger
 
-## Starting Project
+## Time your daily scrum meetings!
 
-Use this project to code along with [Displaying Data in a List](https://developer.apple.com/tutorials/app-dev-training/displaying-data-in-a-list).
+Completed as part of Apple's iOS Dev tutorial Getting Started with Scrumdinger
+
+https://developer.apple.com/tutorials/app-dev-training/getting-started-with-scrumdinger
