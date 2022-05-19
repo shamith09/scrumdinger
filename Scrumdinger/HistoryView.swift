@@ -25,6 +25,7 @@ struct HistoryView: View {
                     Text("\(transcript)")
                 }
             }
+            .padding(.leading)
         }
         .navigationTitle(Text(history.date, style: .date))
     }
