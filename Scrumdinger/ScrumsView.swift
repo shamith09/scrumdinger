@@ -6,8 +6,10 @@ import SwiftUI
 
 struct ScrumsView: View {
     @Binding var scrums: [DailyScrum]
-    @State private var isPresentingNewScrumView = true
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var isPresentingNewScrumView = false
     @State private var newScrumData = DailyScrum.Data()
+    let saveAction: ()->Void
     
     var body: some View {
         List {
@@ -31,6 +33,12 @@ struct ScrumsView: View {
             NavigationView {
                 DetailEditView(data: $newScrumData)
                     .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Dismiss") {
+                                isPresentingNewScrumView = false
+                                newScrumData = DailyScrum.Data()
+                            }
+                        }
                         ToolbarItem(placement: .confirmationAction) {
                             Button("Add") {
                                 let newScrum = DailyScrum(data: newScrumData)
@@ -39,13 +47,12 @@ struct ScrumsView: View {
                                 newScrumData = DailyScrum.Data()
                             }
                         }
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Dismiss") {
-                                isPresentingNewScrumView = false
-                                newScrumData = DailyScrum.Data()
-                            }
-                        }
                     }
+            }
+        }
+        .onChange(of: scenePhase) { phase in
+            if phase == .inactive {
+                saveAction()
             }
         }
     }
@@ -54,7 +61,7 @@ struct ScrumsView: View {
 struct ScrumsView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ScrumsView(scrums: .constant(DailyScrum.sampleData))
+            ScrumsView(scrums: .constant(DailyScrum.sampleData), saveAction: {})
         }
     }
 }
