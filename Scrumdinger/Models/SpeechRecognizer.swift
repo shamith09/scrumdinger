@@ -25,7 +25,7 @@ class SpeechRecognizer: ObservableObject {
         }
     }
     
-    @Published var transcript: String = ""
+    var transcript: String = ""
     
     private var audioEngine: AVAudioEngine?
     private var request: SFSpeechAudioBufferRecognitionRequest?
@@ -77,20 +77,7 @@ class SpeechRecognizer: ObservableObject {
                 let (audioEngine, request) = try Self.prepareEngine()
                 self.audioEngine = audioEngine
                 self.request = request
-                
-                self.task = recognizer.recognitionTask(with: request) { result, error in
-                    let receivedFinalResult = result?.isFinal ?? false
-                    let receivedError = error != nil
-                    
-                    if receivedFinalResult || receivedError {
-                        audioEngine.stop()
-                        audioEngine.inputNode.removeTap(onBus: 0)
-                    }
-                    
-                    if let result = result {
-                        self.speak(result.bestTranscription.formattedString)
-                    }
-                }
+                self.task = recognizer.recognitionTask(with: request, resultHandler: self.recognitionHandler(result:error:))
             } catch {
                 self.reset()
                 self.speakError(error)
@@ -131,6 +118,20 @@ class SpeechRecognizer: ObservableObject {
         try audioEngine.start()
         
         return (audioEngine, request)
+    }
+    
+    private func recognitionHandler(result: SFSpeechRecognitionResult?, error: Error?) {
+        let receivedFinalResult = result?.isFinal ?? false
+        let receivedError = error != nil
+        
+        if receivedFinalResult || receivedError {
+            audioEngine?.stop()
+            audioEngine?.inputNode.removeTap(onBus: 0)
+        }
+        
+        if let result = result {
+            speak(result.bestTranscription.formattedString)
+        }
     }
     
     private func speak(_ message: String) {

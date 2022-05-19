@@ -1,14 +1,12 @@
-//
-//  ErrorView.swift
-//  Scrumdinger
-//
-//  Created by Shamith Pasula on 5/19/22.
-//
+/*
+See LICENSE folder for this sample’s licensing information.
+*/
 
 import SwiftUI
 
 struct ErrorView: View {
     let errorWrapper: ErrorWrapper
+    
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -16,12 +14,12 @@ struct ErrorView: View {
             VStack {
                 Text("An error has occurred!")
                     .font(.title)
-                    .padding()
-                Text("\(errorWrapper.error.localizedDescription)")
+                    .padding(.bottom)
+                Text(errorWrapper.error.localizedDescription)
                     .font(.headline)
-                Text("\(errorWrapper.guidance)")
+                Text(errorWrapper.guidance)
                     .font(.caption)
-                    .padding()
+                    .padding(.top)
                 Spacer()
             }
             .padding()
@@ -43,9 +41,12 @@ struct ErrorView_Previews: PreviewProvider {
     enum SampleError: Error {
         case errorRequired
     }
+    
     static var wrapper: ErrorWrapper {
-        ErrorWrapper(error: SampleError.errorRequired, guidance: "You can safely ignore this error.")
+        ErrorWrapper(error: SampleError.errorRequired,
+                     guidance: "You can safely ignore this error.")
     }
+    
     static var previews: some View {
         ErrorView(errorWrapper: wrapper)
     }

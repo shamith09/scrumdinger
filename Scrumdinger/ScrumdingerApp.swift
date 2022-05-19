@@ -17,7 +17,7 @@ struct ScrumdingerApp: App {
                         do {
                             try await ScrumStore.save(scrums: store.scrums)
                         } catch {
-                            errorWrapper = ErrorWrapper(error: error, guidance: "Error saving scrums")
+                            errorWrapper = ErrorWrapper(error: error, guidance: "Try again later.")
                         }
                     }
                 }
@@ -26,7 +26,7 @@ struct ScrumdingerApp: App {
                 do {
                     store.scrums = try await ScrumStore.load()
                 } catch {
-                    errorWrapper = ErrorWrapper(error: error, guidance: "Error loading scrums")
+                    errorWrapper = ErrorWrapper(error: error, guidance: "Scrumdinger will load sample data and continue.")
                 }
             }
             .sheet(item: $errorWrapper, onDismiss: {

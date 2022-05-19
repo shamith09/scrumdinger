@@ -1,16 +1,14 @@
-//
-//  MeetingTimerView.swift
-//  Scrumdinger
-//
-//  Created by Shamith Pasula on 5/19/22.
-//
+/*
+See LICENSE folder for this sample’s licensing information.
+*/
 
 import SwiftUI
 
 struct MeetingTimerView: View {
-    let theme: Theme
     let speakers: [ScrumTimer.Speaker]
     let isRecording: Bool
+    let theme: Theme
+    
     private var currentSpeaker: String {
         speakers.first(where: { !$0.isCompleted })?.name ?? "Someone"
     }
@@ -20,7 +18,7 @@ struct MeetingTimerView: View {
             .strokeBorder(lineWidth: 24)
             .overlay {
                 VStack {
-                    Text("\(currentSpeaker)")
+                    Text(currentSpeaker)
                         .font(.title)
                     Text("is speaking")
                     Image(systemName: isRecording ? "mic" : "mic.slash")
@@ -29,9 +27,9 @@ struct MeetingTimerView: View {
                         .accessibilityLabel(isRecording ? "with transcription" : "without transcription")
                 }
                 .accessibilityElement(children: .combine)
-                .foregroundColor(theme.accentColor)
+                .foregroundStyle(theme.accentColor)
             }
-            .overlay {
+            .overlay  {
                 ForEach(speakers) { speaker in
                     if speaker.isCompleted, let index = speakers.firstIndex(where: { $0.id == speaker.id }) {
                         SpeakerArc(speakerIndex: index, totalSpeakers: speakers.count)
@@ -46,9 +44,10 @@ struct MeetingTimerView: View {
 
 struct MeetingTimerView_Previews: PreviewProvider {
     static var speakers: [ScrumTimer.Speaker] {
-        [ScrumTimer.Speaker(name: "Mallika", isCompleted: true), ScrumTimer.Speaker(name: "Shamith", isCompleted: false), ScrumTimer.Speaker(name: "Akshat", isCompleted: false)]
+        [ScrumTimer.Speaker(name: "Kim", isCompleted: true), ScrumTimer.Speaker(name: "Bill", isCompleted: false)]
     }
+    
     static var previews: some View {
-        MeetingTimerView(theme: .bubblegum, speakers: speakers, isRecording: true)
+        MeetingTimerView(speakers: speakers, isRecording: true, theme: .yellow)
     }
 }
